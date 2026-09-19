@@ -1,0 +1,176 @@
+<mvc:View
+    controllerName="smartprocure360.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+
+    <App id="app">
+
+        <Page
+            title="SmartProcure360 - Procurement &amp; Vendor Risk Dashboard"
+            showHeader="true">
+
+            <content>
+
+                <VBox
+                    class="sapUiMediumMargin"
+                    width="auto">
+
+                    <!-- HEADER -->
+                    <Title
+                        text="SmartProcure360"
+                        level="H1"
+                        class="sapUiSmallMarginBottom"/>
+
+                    <Text
+                        text="Intelligent Procurement &amp; Vendor Risk Management System"
+                        class="sapUiSmallMarginBottom"/>
+
+
+                    <!-- KPI SECTION -->
+                    <Panel
+                        headerText="Risk Summary"
+                        class="sapUiMediumMarginBottom">
+
+                        <HBox
+                            wrap="Wrap"
+                            justifyContent="SpaceBetween">
+
+                            <VBox class="kpiCard">
+                                <Text text="Total Vendors"/>
+                                <ObjectNumber
+                                    number="{dashboard>/totalVendors}"
+                                    state="Information"/>
+                            </VBox>
+
+                            <VBox class="kpiCard">
+                                <Text text="Low Risk"/>
+                                <ObjectNumber
+                                    number="{dashboard>/lowRisk}"
+                                    state="Success"/>
+                            </VBox>
+
+                            <VBox class="kpiCard">
+                                <Text text="Medium Risk"/>
+                                <ObjectNumber
+                                    number="{dashboard>/mediumRisk}"
+                                    state="Warning"/>
+                            </VBox>
+
+                            <VBox class="kpiCard">
+                                <Text text="High Risk"/>
+                                <ObjectNumber
+                                    number="{dashboard>/highRisk}"
+                                    state="Error"/>
+                            </VBox>
+
+                            <VBox class="kpiCard">
+                                <Text text="Critical Risk"/>
+                                <ObjectNumber
+                                    number="{dashboard>/criticalRisk}"
+                                    state="Error"/>
+                            </VBox>
+
+                        </HBox>
+
+                    </Panel>
+
+
+                    <!-- VENDOR RISK -->
+                    <Panel
+                        headerText="Vendor Risk Overview">
+
+                        <!-- SEARCH BAR -->
+                        <Toolbar>
+
+                            <Title
+                                text="Vendor List"
+                                level="H3"/>
+
+                            <ToolbarSpacer/>
+
+                            <SearchField
+                                id="vendorSearch"
+                                width="320px"
+                                placeholder="Search Vendor ID, Name or Category..."
+                                liveChange=".onSearch"/>
+
+                        </Toolbar>
+
+
+                        <!-- TABLE -->
+                        <Table
+                            id="vendorRiskTable"
+                            items="{/VendorRiskSet}"
+                            growing="true"
+                            growingThreshold="10"
+                            noDataText="No vendors found">
+
+                            <columns>
+
+                                <Column>
+                                    <Text text="Vendor ID"/>
+                                </Column>
+
+                                <Column>
+                                    <Text text="Vendor Name"/>
+                                </Column>
+
+                                <Column>
+                                    <Text text="Category"/>
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Risk Score"/>
+                                </Column>
+
+                                <Column>
+                                    <Text text="Risk Level"/>
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem>
+
+                                    <cells>
+
+                                        <Text
+                                            text="{VendorId}"/>
+
+                                        <Text
+                                            text="{VendorName}"/>
+
+                                        <Text
+                                            text="{Category}"/>
+
+                                        <ObjectNumber
+                                            number="{RiskScore}"/>
+
+                                        <ObjectStatus
+                                            text="{RiskLevel}"
+                                            state="{
+                                                path: 'RiskLevel',
+                                                formatter: '.formatRiskState'
+                                            }"/>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </Panel>
+
+                </VBox>
+
+            </content>
+
+        </Page>
+
+    </App>
+
+</mvc:View>

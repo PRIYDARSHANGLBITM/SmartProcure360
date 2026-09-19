@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartProcure360</title>
+
+    <script
+        id="sap-ui-bootstrap"
+        src="https://ui5.sap.com/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_belize"
+        data-sap-ui-libs="sap.m"
+        data-sap-ui-compatVersion="edge"
+        data-sap-ui-async="true"
+        data-sap-ui-resourceroots='{
+            "smartprocure360": "./"
+        }'>
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            new sap.m.Shell({
+                appWidthLimited: false,
+                app: new sap.ui.core.ComponentContainer({
+                    height: "100%",
+                    name: "smartprocure360",
+                    settings: {
+                        id: "smartprocure360"
+                    }
+                })
+            }).placeAt("content");
+        });
+    </script>
+</head>
+
+<body class="sapUiBody" id="content" style="margin: 0; padding: 0; overflow-x: hidden;">
+</body>
+</html>

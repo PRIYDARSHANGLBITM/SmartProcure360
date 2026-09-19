@@ -1,0 +1,25 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.kpiCard {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 4px;
+    flex: 1;
+    min-width: 140px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.kpiCard .sapMObjectNumber {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.sapMPanel {
+    border-radius: 10px;
+}
