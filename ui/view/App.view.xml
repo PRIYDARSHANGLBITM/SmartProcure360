@@ -1,7 +1,8 @@
 <mvc:View
     controllerName="smartprocure360.controller.App"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
 
     <App id="app">
 
@@ -15,7 +16,6 @@
                     class="sapUiMediumMargin"
                     width="auto">
 
-                    <!-- HEADER -->
                     <Title
                         text="SmartProcure360"
                         level="H1"
@@ -25,8 +25,10 @@
                         text="Intelligent Procurement &amp; Vendor Risk Management System"
                         class="sapUiSmallMarginBottom"/>
 
+                    <!-- =================================================
+                         RISK SUMMARY
+                         ================================================= -->
 
-                    <!-- KPI SECTION -->
                     <Panel
                         headerText="Risk Summary"
                         class="sapUiMediumMarginBottom">
@@ -75,11 +77,1138 @@
                     </Panel>
 
 
-                    <!-- VENDOR RISK -->
-                    <Panel
-                        headerText="Vendor Risk Overview">
+                    <!-- =================================================
+                         RISK ANALYTICS
+                         ================================================= -->
 
-                        <!-- SEARCH BAR -->
+                    <Panel
+                        headerText="Risk Analytics"
+                        class="sapUiMediumMarginBottom">
+
+                        <VBox class="sapUiMediumMargin">
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMarginBottom">
+
+                                <VBox width="220px">
+
+                                    <Text
+                                        text="Average Vendor Risk Score"/>
+
+                                    <ObjectNumber
+                                        number="{analytics>/averageRiskScore}"
+                                        state="Information"/>
+
+                                </VBox>
+
+                                <Text
+                                    text="{analytics>/riskStatusText}"
+                                    wrapping="true"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMarginBottom">
+
+                                <VBox width="120px">
+
+                                    <Text text="LOW"/>
+
+                                    <Text
+                                        text="{dashboard>/lowRisk} vendors"/>
+
+                                </VBox>
+
+                                <ProgressIndicator
+                                    width="100%"
+                                    percentValue="{analytics>/lowPercentage}"
+                                    displayValue="{analytics>/lowPercentage}%"
+                                    state="Success"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMarginBottom">
+
+                                <VBox width="120px">
+
+                                    <Text text="MEDIUM"/>
+
+                                    <Text
+                                        text="{dashboard>/mediumRisk} vendors"/>
+
+                                </VBox>
+
+                                <ProgressIndicator
+                                    width="100%"
+                                    percentValue="{analytics>/mediumPercentage}"
+                                    displayValue="{analytics>/mediumPercentage}%"
+                                    state="Warning"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMarginBottom">
+
+                                <VBox width="120px">
+
+                                    <Text text="HIGH"/>
+
+                                    <Text
+                                        text="{dashboard>/highRisk} vendors"/>
+
+                                </VBox>
+
+                                <ProgressIndicator
+                                    width="100%"
+                                    percentValue="{analytics>/highPercentage}"
+                                    displayValue="{analytics>/highPercentage}%"
+                                    state="Error"/>
+
+                            </HBox>
+
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMarginBottom">
+
+                                <VBox width="120px">
+
+                                    <Text text="CRITICAL"/>
+
+                                    <Text
+                                        text="{dashboard>/criticalRisk} vendors"/>
+
+                                </VBox>
+
+                                <ProgressIndicator
+                                    width="100%"
+                                    percentValue="{analytics>/criticalPercentage}"
+                                    displayValue="{analytics>/criticalPercentage}%"
+                                    state="Error"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </Panel>
+
+
+                    <!-- =========================================================
+     DELIVERY ANALYTICS
+     ========================================================= -->
+
+<Panel
+    headerText="Delivery Analytics"
+    expandable="true"
+    expanded="true"
+    class="sapUiMediumMarginTop">
+
+    <VBox class="sapUiSmallMargin">
+
+        <!-- DELIVERY KPI SUMMARY -->
+
+        <HBox
+            justifyContent="SpaceAround"
+            wrap="Wrap">
+
+            <VBox class="kpiCard">
+                <Text text="Total Deliveries"/>
+                <ObjectNumber
+                    number="{deliveryAnalytics>/totalDeliveries}"
+                    unit="Deliveries"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Delivered"/>
+                <ObjectNumber
+                    number="{deliveryAnalytics>/deliveredDeliveries}"
+                    unit="Deliveries"
+                    state="Success"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Pending"/>
+                <ObjectNumber
+                    number="{deliveryAnalytics>/pendingDeliveries}"
+                    unit="Deliveries"
+                    state="Warning"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Delayed"/>
+                <ObjectNumber
+                    number="{deliveryAnalytics>/delayedDeliveries}"
+                    unit="Deliveries"
+                    state="Error"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Total Delay Days"/>
+                <ObjectNumber
+                    number="{deliveryAnalytics>/totalDelayDays}"
+                    unit="Days"
+                    state="Error"/>
+            </VBox>
+
+        </HBox>
+
+
+        <!-- DELIVERY DETAILS TABLE -->
+
+        <Table
+            id="deliveryAnalyticsTable"
+            class="sapUiSmallMarginTop"
+            items="{deliveryAnalytics>/DeliveryAnlySet}"
+            growing="true"
+            growingThreshold="10"
+            noDataText="No delivery analytics data available.">
+
+            <headerToolbar>
+
+                <Toolbar>
+
+                    <Title
+                        text="Delivery Details"
+                        level="H4"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Refresh Delivery Analytics"
+                        icon="sap-icon://refresh"
+                        press=".loadDeliveryAnalytics"/>
+
+                </Toolbar>
+
+            </headerToolbar>
+
+
+            <columns>
+
+                <Column>
+                    <Text text="Delivery ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="PO ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Item No"/>
+                </Column>
+
+                <Column>
+                    <Text text="Vendor ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Vendor Name"/>
+                </Column>
+
+                <Column>
+                    <Text text="Category"/>
+                </Column>
+
+                <Column>
+                    <Text text="Expected Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Delivery Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Quantity"/>
+                </Column>
+
+                <Column>
+                    <Text text="Delay Days"/>
+                </Column>
+
+                <Column>
+                    <Text text="Status"/>
+                </Column>
+
+            </columns>
+
+
+            <items>
+
+                <ColumnListItem>
+
+                    <cells>
+
+                        <Text
+                            text="{deliveryAnalytics>DeliveryId}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>PurchaseOrderId}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>ItemNo}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>VendorId}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>VendorName}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>VendorCategory}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>ExpectedDate}"/>
+
+                        <Text
+                            text="{deliveryAnalytics>DeliveryDate}"/>
+
+                        <ObjectNumber
+                            number="{deliveryAnalytics>DeliveredQuantity}"/>
+
+                        <ObjectNumber
+                            number="{deliveryAnalytics>DelayDays}"/>
+
+                        <ObjectStatus
+                            text="{deliveryAnalytics>DeliveryStatus}"
+                            state="{
+                                path: 'deliveryAnalytics>DeliveryStatus',
+                                formatter: '.formatDeliveryStatusState'
+                            }"/>
+
+                    </cells>
+
+                </ColumnListItem>
+
+            </items>
+
+        </Table>
+
+    </VBox>
+
+</Panel>
+                    <!-- =========================================================
+     PURCHASE ORDER ANALYTICS
+     ========================================================= -->
+
+<Panel
+    headerText="Purchase Order Analytics"
+    expandable="true"
+    expanded="true"
+    class="sapUiMediumMarginTop">
+
+    <VBox class="sapUiSmallMargin">
+
+        <!-- PO KPI SUMMARY -->
+
+        <HBox
+            justifyContent="SpaceAround"
+            wrap="Wrap">
+
+            <VBox class="kpiCard">
+                <Text text="Total POs"/>
+                <ObjectNumber
+                    number="{poAnalytics>/totalPOs}"
+                    unit="Orders"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Total PO Amount"/>
+                <ObjectNumber
+                    number="{poAnalytics>/totalAmount}"
+                    unit="USD"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Delivered POs"/>
+                <ObjectNumber
+                    number="{poAnalytics>/deliveredPOs}"
+                    unit="Orders"
+                    state="Success"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Delayed POs"/>
+                <ObjectNumber
+                    number="{poAnalytics>/delayedPOs}"
+                    unit="Orders"
+                    state="Error"/>
+            </VBox>
+
+        </HBox>
+
+
+        <!-- PO DETAILS TABLE -->
+
+        <Table
+            id="poAnalyticsTable"
+            class="sapUiSmallMarginTop"
+            items="{poAnalytics>/POAnalyticsSet}"
+            growing="true"
+            growingThreshold="10"
+            noDataText="No purchase order analytics data available.">
+
+            <headerToolbar>
+
+                <Toolbar>
+
+                    <Title
+                        text="Purchase Order Details"
+                        level="H4"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Refresh PO Analytics"
+                        icon="sap-icon://refresh"
+                        press=".loadPOAnalytics"/>
+
+                </Toolbar>
+
+            </headerToolbar>
+
+
+            <columns>
+
+                <Column>
+                    <Text text="PO ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="PR ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Vendor ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Vendor Name"/>
+                </Column>
+
+                <Column>
+                    <Text text="Category"/>
+                </Column>
+
+                <Column>
+                    <Text text="Order Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Expected Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Actual Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Amount"/>
+                </Column>
+
+                <Column>
+                    <Text text="Currency"/>
+                </Column>
+
+                <Column>
+                    <Text text="Status"/>
+                </Column>
+
+            </columns>
+
+
+            <items>
+
+                <ColumnListItem>
+
+                    <cells>
+
+                        <Text
+                            text="{poAnalytics>PurchaseOrderId}"/>
+
+                        <Text
+                            text="{poAnalytics>PurchaseRequisitionId}"/>
+
+                        <Text
+                            text="{poAnalytics>VendorId}"/>
+
+                        <Text
+                            text="{poAnalytics>VendorName}"/>
+
+                        <Text
+                            text="{poAnalytics>VendorCategory}"/>
+
+                        <Text
+                            text="{poAnalytics>OrderDate}"/>
+
+                        <Text
+                            text="{poAnalytics>ExpectedDate}"/>
+
+                        <Text
+                            text="{poAnalytics>ActualDate}"/>
+
+                        <ObjectNumber
+                            number="{poAnalytics>TotalAmount}"/>
+
+                        <Text
+                            text="{poAnalytics>Currency}"/>
+
+                        <ObjectStatus
+                            text="{poAnalytics>POStatus}"
+                            state="{
+                                path: 'poAnalytics>POStatus',
+                                formatter: '.formatPOStatusState'
+                            }"/>
+
+                    </cells>
+
+                </ColumnListItem>
+
+            </items>
+
+        </Table>
+
+    </VBox>
+
+</Panel>
+
+<!-- =========================================================
+     PROCUREMENT OVERVIEW
+     ========================================================= -->
+
+<Panel
+    headerText="Procurement Overview"
+    expandable="true"
+    expanded="true"
+    class="sapUiMediumMarginTop">
+
+    <VBox class="sapUiSmallMargin">
+
+        <!-- PROCUREMENT KPI SUMMARY -->
+
+        <HBox
+            justifyContent="SpaceAround"
+            wrap="Wrap">
+
+            <VBox class="kpiCard">
+                <Text text="Total POs"/>
+                <ObjectNumber
+                    number="{procOverview>/totalPOs}"
+                    unit="Orders"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Total PO Amount"/>
+                <ObjectNumber
+                    number="{procOverview>/totalAmount}"
+                    unit="USD"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Low Risk POs"/>
+                <ObjectNumber
+                    number="{procOverview>/lowRiskPOs}"
+                    unit="Orders"
+                    state="Success"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="High Risk POs"/>
+                <ObjectNumber
+                    number="{procOverview>/highRiskPOs}"
+                    unit="Orders"
+                    state="Error"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Delayed POs"/>
+                <ObjectNumber
+                    number="{procOverview>/delayedPOs}"
+                    unit="Orders"
+                    state="Error"/>
+            </VBox>
+
+        </HBox>
+
+
+        <!-- PROCUREMENT OVERVIEW TABLE -->
+
+        <Table
+            id="procurementOverviewTable"
+            class="sapUiSmallMarginTop"
+            items="{procOverview>/ProcOverviewSet}"
+            growing="true"
+            growingThreshold="10"
+            noDataText="No procurement overview data available.">
+
+            <headerToolbar>
+
+                <Toolbar>
+
+                    <Title
+                        text="Procurement Overview Details"
+                        level="H4"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Refresh Procurement Overview"
+                        icon="sap-icon://refresh"
+                        press=".loadProcurementOverview"/>
+
+                </Toolbar>
+
+            </headerToolbar>
+
+
+            <columns>
+
+                <Column>
+                    <Text text="PO ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="PR ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Vendor"/>
+                </Column>
+
+                <Column>
+                    <Text text="Category"/>
+                </Column>
+
+                <Column>
+                    <Text text="Risk Score"/>
+                </Column>
+
+                <Column>
+                    <Text text="Risk Level"/>
+                </Column>
+
+                <Column>
+                    <Text text="Order Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Expected Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Actual Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Amount"/>
+                </Column>
+
+                <Column>
+                    <Text text="Currency"/>
+                </Column>
+
+                <Column>
+                    <Text text="Status"/>
+                </Column>
+
+            </columns>
+
+
+            <items>
+
+                <ColumnListItem>
+
+                    <cells>
+
+                        <Text
+                            text="{procOverview>PurchaseOrderId}"/>
+
+                        <Text
+                            text="{procOverview>PurchaseRequisitionId}"/>
+
+                        <Text
+                            text="{procOverview>VendorName}"/>
+
+                        <Text
+                            text="{procOverview>VendorCategory}"/>
+
+                        <ObjectNumber
+                            number="{procOverview>RiskScore}"/>
+
+                        <ObjectStatus
+                            text="{procOverview>RiskLevel}"
+                            state="{
+                                path: 'procOverview>RiskLevel',
+                                formatter: '.formatRiskState'
+                            }"/>
+
+                        <Text
+                            text="{procOverview>OrderDate}"/>
+
+                        <Text
+                            text="{procOverview>ExpectedDate}"/>
+
+                        <Text
+                            text="{procOverview>ActualDate}"/>
+
+                        <ObjectNumber
+                            number="{procOverview>TotalAmount}"/>
+
+                        <Text
+                            text="{procOverview>Currency}"/>
+
+                        <ObjectStatus
+                            text="{procOverview>POStatus}"
+                            state="{
+                                path: 'procOverview>POStatus',
+                                formatter: '.formatPOStatusState'
+                            }"/>
+
+                    </cells>
+
+                </ColumnListItem>
+
+            </items>
+
+        </Table>
+
+    </VBox>
+
+</Panel>
+
+<!-- =========================================================
+     PURCHASE REQUISITION MANAGEMENT
+     ========================================================= -->
+
+<Panel
+    headerText="Purchase Requisition Management"
+    expandable="true"
+    expanded="true"
+    class="sapUiMediumMarginTop">
+
+    <VBox class="sapUiSmallMargin">
+
+        <!-- PR KPI SUMMARY -->
+
+        <HBox
+            justifyContent="SpaceAround"
+            wrap="Wrap">
+
+            <VBox class="kpiCard">
+                <Text text="Total PRs"/>
+                <ObjectNumber
+                    number="{prAnalytics>/totalPRs}"
+                    unit="Requests"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Total PR Amount"/>
+                <ObjectNumber
+                    number="{prAnalytics>/totalAmount}"
+                    unit="USD"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Approved PRs"/>
+                <ObjectNumber
+                    number="{prAnalytics>/approvedPRs}"
+                    unit="Requests"
+                    state="Success"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Submitted PRs"/>
+                <ObjectNumber
+                    number="{prAnalytics>/submittedPRs}"
+                    unit="Requests"
+                    state="Warning"/>
+            </VBox>
+
+            <VBox class="kpiCard">
+                <Text text="Draft PRs"/>
+                <ObjectNumber
+                    number="{prAnalytics>/draftPRs}"
+                    unit="Requests"
+                    state="Information"/>
+            </VBox>
+
+        </HBox>
+
+
+        <!-- PR DETAILS TABLE -->
+
+        <Table
+            id="prAnalyticsTable"
+            class="sapUiSmallMarginTop"
+            items="{prAnalytics>/PRSet}"
+            growing="true"
+            growingThreshold="10"
+            noDataText="No purchase requisition data available.">
+
+            <headerToolbar>
+
+                <Toolbar>
+
+                    <Title
+                        text="Purchase Requisition Details"
+                        level="H4"/>
+
+                    <ToolbarSpacer/>
+
+                    <Button
+                        text="Refresh PR Data"
+                        icon="sap-icon://refresh"
+                        press=".loadPRData"/>
+
+                </Toolbar>
+
+            </headerToolbar>
+
+
+            <columns>
+
+                <Column>
+                    <Text text="PR ID"/>
+                </Column>
+
+                <Column>
+                    <Text text="Requester"/>
+                </Column>
+
+                <Column>
+                    <Text text="Department"/>
+                </Column>
+
+                <Column>
+                    <Text text="Priority"/>
+                </Column>
+
+                <Column>
+                    <Text text="Request Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Required Date"/>
+                </Column>
+
+                <Column>
+                    <Text text="Amount"/>
+                </Column>
+
+                <Column>
+                    <Text text="Currency"/>
+                </Column>
+
+                <Column>
+                    <Text text="Status"/>
+                </Column>
+
+            </columns>
+
+
+            <items>
+
+                <ColumnListItem>
+
+                    <cells>
+
+                        <Text
+                            text="{prAnalytics>PR_ID}"/>
+
+                        <Text
+                            text="{prAnalytics>REQUESTER}"/>
+
+                        <Text
+                            text="{prAnalytics>DEPARTMENT}"/>
+
+                        <Text
+                            text="{prAnalytics>PRIORITY}"/>
+
+                        <Text
+                            text="{prAnalytics>REQUEST_DATE}"/>
+
+                        <Text
+                            text="{prAnalytics>REQUIRED_DATE}"/>
+
+                        <ObjectNumber
+                            number="{prAnalytics>TOTAL_AMOUNT}"/>
+
+                        <Text
+                            text="{prAnalytics>CURRENCY}"/>
+
+                        <ObjectStatus
+                            text="{prAnalytics>STATUS}"
+                            state="{
+                                path: 'prAnalytics>STATUS',
+                                formatter: '.formatPRStatusState'
+                            }"/>
+
+                    </cells>
+
+                </ColumnListItem>
+
+            </items>
+
+        </Table>
+
+    </VBox>
+
+</Panel>
+
+
+    <!-- =================================================
+     SMART ALERTS
+     ================================================= -->
+
+<Panel
+    headerText="Smart Alerts"
+    class="sapUiMediumMarginBottom">
+
+    <HBox
+        wrap="Wrap"
+        justifyContent="SpaceBetween"
+        class="sapUiSmallMarginBottom">
+
+        <VBox class="kpiCard">
+            <Text text="Total Alerts"/>
+            <ObjectNumber
+                number="{alerts>/totalAlerts}"
+                state="Information"/>
+        </VBox>
+
+        <VBox class="kpiCard">
+            <Text text="Open Alerts"/>
+            <ObjectNumber
+                number="{alerts>/openAlerts}"
+                state="Warning"/>
+        </VBox>
+
+        <VBox class="kpiCard">
+            <Text text="High Alerts"/>
+            <ObjectNumber
+                number="{alerts>/highAlerts}"
+                state="Error"/>
+        </VBox>
+
+        <VBox class="kpiCard">
+            <Text text="Critical Alerts"/>
+            <ObjectNumber
+                number="{alerts>/criticalAlerts}"
+                state="Error"/>
+        </VBox>
+
+    </HBox>
+
+
+    <Table
+    id="smartAlertsTable"
+    items="{alerts>/AlertSet}"
+    growing="true"
+    growingThreshold="10"
+    noDataText="No smart alerts found"
+    width="100%">
+
+    <columns>
+
+        <Column>
+            <Text text="Alert ID"/>
+        </Column>
+
+        <Column>
+            <Text text="Vendor ID"/>
+        </Column>
+
+        <Column>
+            <Text text="Alert Type"/>
+        </Column>
+
+        <Column>
+            <Text text="Severity"/>
+        </Column>
+
+        <Column>
+            <Text text="Status"/>
+        </Column>
+
+        <Column>
+            <Text text="Message"/>
+        </Column>
+
+    </columns>
+
+    <items>
+
+        <ColumnListItem>
+
+            <cells>
+
+                <Text text="{alerts>AlertId}"/>
+
+                <Text text="{alerts>VendorId}"/>
+
+                <Text text="{alerts>AlertType}"/>
+
+                <Text text="{alerts>Severity}"/>
+
+                <Text text="{alerts>Status}"/>
+
+                <Text
+                    text="{alerts>Message}"
+                    wrapping="true"/>
+
+            </cells>
+
+        </ColumnListItem>
+
+    </items>
+
+</Table>
+
+</Panel>
+
+
+<!-- =================================================
+     AUDIT LOG
+     ================================================= -->
+
+<Panel
+    headerText="Audit Log"
+    class="sapUiMediumMarginBottom">
+
+    <HBox
+        justifyContent="SpaceBetween"
+        alignItems="Center"
+        class="sapUiSmallMarginBottom">
+
+        <VBox>
+
+            <Text
+                text="Procurement Activity &amp; Change History"
+                class="sapUiSmallMarginBottom"/>
+
+            <ObjectNumber
+                number="{audit>/totalAudit}"
+                unit="Records"
+                state="Information"/>
+
+        </VBox>
+
+        <Button
+            text="Refresh Audit Log"
+            icon="sap-icon://refresh"
+            press=".loadAuditData"/>
+
+    </HBox>
+
+
+    <Table
+        id="auditLogTable"
+        items="{audit>/AuditSet}"
+        growing="true"
+        growingThreshold="10"
+        noDataText="No audit records found"
+        width="100%">
+
+        <columns>
+
+            <Column>
+                <Text text="Audit ID"/>
+            </Column>
+
+            <Column>
+                <Text text="Object Type"/>
+            </Column>
+
+            <Column>
+                <Text text="Object ID"/>
+            </Column>
+
+            <Column>
+                <Text text="Action"/>
+            </Column>
+
+            <Column>
+                <Text text="Changed By"/>
+            </Column>
+
+            <Column>
+                <Text text="Changed On"/>
+            </Column>
+
+            <Column>
+                <Text text="Changed At"/>
+            </Column>
+
+            <Column>
+                <Text text="Old Value"/>
+            </Column>
+
+            <Column>
+                <Text text="New Value"/>
+            </Column>
+
+        </columns>
+
+
+        <items>
+
+            <ColumnListItem>
+
+                <cells>
+
+                    <Text
+                        text="{audit>AuditId}"/>
+
+                    <Text
+                        text="{audit>ObjectType}"/>
+
+                    <Text
+                        text="{audit>ObjectId}"/>
+
+                    <Text
+                        text="{audit>Action}"/>
+
+                    <Text
+                        text="{audit>ChangedBy}"/>
+
+                    <Text
+                        text="{audit>ChangedOn}"/>
+
+                    <Text
+                        text="{path: 'audit>ChangedAt', formatter: '.formatChangedAt'}"/>
+
+                    <Text
+                        text="{audit>OldValue}"/>
+
+                    <Text
+                        text="{audit>NewValue}"/>
+
+                </cells>
+
+            </ColumnListItem>
+
+        </items>
+
+    </Table>
+
+</Panel>
+
+
+                    <!-- =================================================
+                         VENDOR RISK OVERVIEW
+                         ================================================= -->
+
+                    <Panel
+                        headerText="Vendor Risk Overview"
+                        class="sapUiMediumMarginBottom">
+
                         <Toolbar>
 
                             <Title
@@ -92,15 +1221,61 @@
                                 id="vendorSearch"
                                 width="320px"
                                 placeholder="Search Vendor ID, Name or Category..."
-                                liveChange=".onSearch"/>
+                                liveChange=".onVendorSearch"
+                                search=".onVendorSearch"/>
+
+                            <Select
+                                id="riskFilter"
+                                width="150px"
+                                selectedKey="ALL"
+                                change=".onRiskFilterChange">
+
+                                <items>
+
+                                    <core:Item
+                                        key="ALL"
+                                        text="All Risks"/>
+
+                                    <core:Item
+                                        key="LOW"
+                                        text="LOW"/>
+
+                                    <core:Item
+                                        key="MEDIUM"
+                                        text="MEDIUM"/>
+
+                                    <core:Item
+                                        key="HIGH"
+                                        text="HIGH"/>
+
+                                    <core:Item
+                                        key="CRITICAL"
+                                        text="CRITICAL"/>
+
+                                </items>
+
+                            </Select>
+
+
+                            <Button
+                                text="Clear"
+                                icon="sap-icon://decline"
+                                type="Transparent"
+                                press=".onClearFilters"/>
+
+
+                            <Button
+                                text="Refresh"
+                                icon="sap-icon://refresh"
+                                type="Transparent"
+                                press=".onRefresh"/>
 
                         </Toolbar>
 
 
-                        <!-- TABLE -->
                         <Table
                             id="vendorRiskTable"
-                            items="{/VendorRiskSet}"
+                            items="{vendor>/VendorRiskSet}"
                             growing="true"
                             growingThreshold="10"
                             noDataText="No vendors found">
@@ -132,26 +1307,28 @@
 
                             <items>
 
-                                <ColumnListItem>
+                                <ColumnListItem
+                                    type="Active"
+                                    press=".onVendorPress">
 
                                     <cells>
 
                                         <Text
-                                            text="{VendorId}"/>
+                                            text="{vendor>VendorId}"/>
 
                                         <Text
-                                            text="{VendorName}"/>
+                                            text="{vendor>VendorName}"/>
 
                                         <Text
-                                            text="{Category}"/>
+                                            text="{vendor>Category}"/>
 
                                         <ObjectNumber
-                                            number="{RiskScore}"/>
+                                            number="{vendor>RiskScore}"/>
 
                                         <ObjectStatus
-                                            text="{RiskLevel}"
+                                            text="{vendor>RiskLevel}"
                                             state="{
-                                                path: 'RiskLevel',
+                                                path: 'vendor>RiskLevel',
                                                 formatter: '.formatRiskState'
                                             }"/>
 
@@ -168,6 +1345,329 @@
                 </VBox>
 
             </content>
+
+
+            <!-- =====================================================
+                 VENDOR DETAILS DIALOG
+                 ===================================================== -->
+
+            <Dialog
+                id="vendorDetailsDialog"
+                title="Vendor Risk Management"
+                contentWidth="620px"
+                stretchOnPhone="true">
+
+                <content>
+
+                    <VBox class="sapUiMediumMargin">
+
+                        <!-- =========================================
+                             VENDOR INFORMATION
+                             ========================================= -->
+
+                        <Title
+                            text="Vendor Information"
+                            level="H3"
+                            class="sapUiSmallMarginBottom"/>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Vendor ID"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/VendorId}"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Vendor Name"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/VendorName}"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Category"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/Category}"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Country"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/Country}"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Status"
+                                width="160px"/>
+
+                            <ObjectStatus
+                                text="{selectedVendor>/Status}"/>
+
+                        </HBox>
+
+
+                        <!-- =========================================
+                             RISK ANALYSIS
+                             ========================================= -->
+
+                        <Title
+                            text="Risk Analysis"
+                            level="H3"
+                            class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Risk Score"
+                                width="160px"/>
+
+                            <ObjectNumber
+                                number="{selectedVendor>/RiskScore}"
+                                state="{
+                                    path: 'selectedVendor>/RiskLevel',
+                                    formatter: '.formatRiskState'
+                                }"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Risk Level"
+                                width="160px"/>
+
+                            <ObjectStatus
+                                text="{selectedVendor>/RiskLevel}"
+                                state="{
+                                    path: 'selectedVendor>/RiskLevel',
+                                    formatter: '.formatRiskState'
+                                }"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Start"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Assessment"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/Assessment}"
+                                wrapping="true"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Recommendation"
+                                width="160px"/>
+
+                            <ObjectStatus
+                                text="{selectedVendor>/Recommendation}"
+                                state="{
+                                    path: 'selectedVendor>/RiskLevel',
+                                    formatter: '.formatRiskState'
+                                }"/>
+
+                        </HBox>
+
+
+                        <!-- =========================================
+                             MANAGEMENT ACTION
+                             ========================================= -->
+
+                        <Title
+                            text="Management Action"
+                            level="H3"
+                            class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
+
+
+                        <HBox
+                            alignItems="Start"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Action"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/ManagementAction}"
+                                wrapping="true"/>
+
+                        </HBox>
+
+
+                        <!-- =========================================
+                             APPROVAL WORKFLOW
+                             ========================================= -->
+
+                        <Title
+                            text="Approval Workflow"
+                            level="H3"
+                            class="sapUiMediumMarginTop sapUiSmallMarginBottom"/>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Review Status"
+                                width="160px"/>
+
+                            <ObjectStatus
+                                text="{selectedVendor>/ReviewStatus}"
+                                state="{
+                                    path: 'selectedVendor>/ReviewStatus',
+                                    formatter: '.formatReviewState'
+                                }"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Approval ID"
+                                width="160px"/>
+
+                            <Text
+                                text="{selectedVendor>/ApprovalId}"/>
+
+                        </HBox>
+
+
+                        <HBox
+                            alignItems="Center"
+                            class="sapUiSmallMarginBottom">
+
+                            <Label
+                                text="Decision"
+                                width="160px"/>
+
+                            <ObjectStatus
+                                text="{selectedVendor>/ApprovalDecision}"
+                                state="{
+                                    path: 'selectedVendor>/ApprovalDecision',
+                                    formatter: '.formatReviewState'
+                                }"/>
+
+                        </HBox>
+
+
+                        <!-- =========================================
+                             WORKFLOW ACTION BUTTONS
+                             ========================================= -->
+
+                        <HBox
+                            width="100%"
+                            justifyContent="SpaceBetween"
+                            class="sapUiSmallMarginTop">
+
+                            <!-- Mark for Review -->
+
+                            <Button
+                                text="Mark for Review"
+                                icon="sap-icon://flag"
+                                type="Emphasized"
+                                width="32%"
+                                visible="{= ${selectedVendor>/ReviewStatus} === 'NOT REVIEWED' }"
+                                press=".onMarkForReview"/>
+
+
+                            <!-- Approve -->
+
+                            <Button
+                                text="Approve"
+                                icon="sap-icon://accept"
+                                type="Accept"
+                                width="32%"
+                                visible="{= ${selectedVendor>/ReviewStatus} === 'PENDING' }"
+                                press=".onApproveVendor"/>
+
+
+                            <!-- Reject -->
+
+                            <Button
+                                text="Reject"
+                                icon="sap-icon://decline"
+                                type="Reject"
+                                width="32%"
+                                visible="{= ${selectedVendor>/ReviewStatus} === 'PENDING' }"
+                                press=".onRejectVendor"/>
+
+                        </HBox>
+
+
+                    </VBox>
+
+                </content>
+
+
+                <!-- =================================================
+                     DIALOG FOOTER
+                     ================================================= -->
+
+                <beginButton>
+
+                    <Button
+                        text="Close"
+                        icon="sap-icon://decline"
+                        press=".onCloseVendorDialog"/>
+
+                </beginButton>
+
+            </Dialog>
 
         </Page>
 
