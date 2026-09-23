@@ -1452,8 +1452,6 @@ The application has been tested across the major business functions.
 - Browser refresh
 - Backend persistence
 
----
-
 # Screenshots
 
 Screenshots are included to demonstrate the working SAPUI5 application.
@@ -1537,7 +1535,6 @@ Shows the vendor review and approval workflow.
 Demonstrates vendor search and risk-level filtering.
 
 ---
-
 # Screenshot Guidelines
 
 For a professional GitHub presentation, screenshots should:
